@@ -1,0 +1,98 @@
+{
+  "memory":0,
+  "messages":{
+    "status":[
+      {
+        "typeId":4,
+        "time":1474986838,
+        "text":"Es fehlt das USB-Gerät 15d9:0a4d: Trust International B.V. Optical Mouse"
+      },
+      {
+        "typeId":4,
+        "time":1474986838,
+        "text":"Es fehlt das USB-Gerät 0461:0010: Primax Electronics, Ltd HP Keyboard"
+      },
+      {
+        "typeId":3,
+        "time":1474986838,
+        "text":"Es wurde ein unbekanntes USB-Gerät mit der ID 045e:0745 gefunden: Microsoft Corp. Nano Transceiver v1.0 for Bluetooth"
+      },
+      {
+        "typeId":3,
+        "time":1474986838,
+        "text":"Es wurde ein unbekanntes HDMI-Gerät gefunden: device_name=SEC-EPSON_PJ \\ "
+      },
+      {
+        "typeId":4,
+        "time":1474986838,
+        "text":"unbekannter und unbehandelter Fehler: \\ Traceback (most recent call last): \\ File 'tms-status.py', line 342, in <module> \\ sendlog() \\ File 'tms-status.py', line 297, in sendlog \\ response = requests.post(url, data={'status': json}) \\ File '/usr/lib/python2.7/dist-packages/requests/api.py', line 94, in post \\ return request('post', url, data=data, json=json, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/api.py', line 49, in request \\ return session.request(method=method, url=url, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/sessions.py', line 457, in request \\ resp = self.send(prep, **send_kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/sessions.py', line 569, in send \\ r = adapter.send(request, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/adapters.py', line 407, in send \\ raise ConnectionError(err, request=request) \\ ConnectionError: ('Connection aborted.', error(101, 'Network is unreachable'))"
+      },
+      {
+        "typeId":4,
+        "time":1474986958,
+        "text":"Es fehlt das USB-Gerät 15d9:0a4d: Trust International B.V. Optical Mouse"
+      },
+      {
+        "typeId":4,
+        "time":1474986958,
+        "text":"Es fehlt das USB-Gerät 0461:0010: Primax Electronics, Ltd HP Keyboard"
+      },
+      {
+        "typeId":3,
+        "time":1474986958,
+        "text":"Es wurde ein unbekanntes USB-Gerät mit der ID 045e:0745 gefunden: Microsoft Corp. Nano Transceiver v1.0 for Bluetooth"
+      },
+      {
+        "typeId":3,
+        "time":1474986958,
+        "text":"Es wurde ein unbekanntes HDMI-Gerät gefunden: device_name=SEC-EPSON_PJ \\ "
+      },
+      {
+        "typeId":4,
+        "time":1474986959,
+        "text":"unbekannter und unbehandelter Fehler: \\ Traceback (most recent call last): \\ File 'tms-status.py', line 342, in <module> \\ sendlog() \\ File 'tms-status.py', line 297, in sendlog \\ response = requests.post(url, data={'status': json}) \\ File '/usr/lib/python2.7/dist-packages/requests/api.py', line 94, in post \\ return request('post', url, data=data, json=json, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/api.py', line 49, in request \\ return session.request(method=method, url=url, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/sessions.py', line 457, in request \\ resp = self.send(prep, **send_kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/sessions.py', line 569, in send \\ r = adapter.send(request, **kwargs) \\ File '/usr/lib/python2.7/dist-packages/requests/adapters.py', line 407, in send \\ raise ConnectionError(err, request=request) \\ ConnectionError: ('Connection aborted.', error(101, 'Network is unreachable'))"
+      },
+      {
+        "typeId":4,
+        "time":1474987014,
+        "text":"Es fehlt das USB-Gerät 15d9:0a4d: Trust International B.V. Optical Mouse"
+      },
+      {
+        "typeId":4,
+        "time":1474987014,
+        "text":"Es fehlt das USB-Gerät 0461:0010: Primax Electronics, Ltd HP Keyboard"
+      },
+      {
+        "typeId":3,
+        "time":1474987014,
+        "text":"Es wurde ein unbekanntes USB-Gerät mit der ID 045e:0745 gefunden: Microsoft Corp. Nano Transceiver v1.0 for Bluetooth"
+      },
+      {
+        "typeId":3,
+        "time":1474987014,
+        "text":"Es wurde ein unbekanntes HDMI-Gerät gefunden: device_name=SEC-EPSON_PJ \\ "
+      }
+    ],
+    "mediaplayer":[
+      {
+        "typeId":1,
+        "time":0,
+        "text":"TEST MESSAGE 1"
+      }
+    ],
+    "youtube":[
+      {
+        "typeId":1,
+        "time":0,
+        "text":"TEST MESSAGE 2"
+      }
+    ],
+    "mediathek":[
+      {
+        "typeId":1,
+        "time":0,
+        "text":"TEST MESSAGE 3"
+      }
+    ]
+  }
+}

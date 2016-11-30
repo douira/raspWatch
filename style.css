@@ -1,0 +1,21 @@
+body {
+  margin: 20px;
+}
+.table-assigned {
+  background-color: hsl(245, 100%, 94%);
+}
+.table-assigned:hover {
+  background-color: hsl(245, 100%, 91%);
+}
+.messageTable td {
+  white-space: nowrap;
+}
+.table-assigned-color-text {
+  color: hsl(245, 36%, 41%);
+}
+.yellow-item {
+  background-color: #fcf8e3;
+}
+.roomTable {
+  margin: 0px;
+}
