@@ -1,8 +1,4 @@
 <?php
-/*TODO:
-+make several columns fore different message types
-+Send mail to all admins with not solved messages (essentially messages.php for each admin)
-*/
 include "util.php";
 setupPage("Überblick");
 setupUser();
