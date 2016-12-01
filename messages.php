@@ -8,7 +8,7 @@ if (! empty($_GET["action"]) && ! empty($_GET["id"])) {
   switch ($_GET["action"]) {
     case "delete":
       deleteTask($id);
-      echo "<p>Nachricht mit ID {$id} wurde entfernt.</p>";
+      echo "<p class='text-success'>Nachricht mit ID {$id} wurde entfernt.</p>";
       break;
   }
 }

@@ -5,14 +5,12 @@ setupUser();
 if (permIsHigh($userPerm)) {
   if (! empty($_POST["email"])) {
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-    echo "<p>";
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
       query("UPDATE admin SET email={$email} WHERE id={$userId}");
-      echo "Email zu '{$email}' geändert!";
+      echo "<p class='text-success'>Email zu '{$email}' geändert!</p>";
     } else {
-      echo "Email '{$email}' ungültig!";
+      echo "<p class='text-danger'>Email '{$email}' ungültig!</p>";
     }
-    echo "</p>";
   }
   deleteUser();
   echo "<br><h4>Email ändern</h4>";

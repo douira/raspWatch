@@ -10,9 +10,9 @@ if (! permIsHigh($userPerm)) {
     if ($_POST["pswdSet"] === $_POST["pswdRep"]) {
       $pswdSetSucess = true;
       query("UPDATE admin SET password={$_POST["pswdSet"]} WHERE id={$userId}");
-      echo "<h3>Passwort geändert!</h3>";
+      echo "<p class='text-success'>Passwort geändert!</p>";
     } else {
-      echo "<h3>Passwörter stimmen nicht überein!</h3>";
+      echo "<p class='text-danger'>Passwörter stimmen nicht überein!</p>";
     }
   }
   if (! $pswdSetSucess) {
