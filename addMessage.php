@@ -15,7 +15,16 @@ if (! empty($_POST["message"])) {
   if (! $moduleId) {
     $moduleId = 0;
   }
-  query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1," . mysqli_real_escape_string($dbConn, $_POST["comment"]) . ")");
+  query("
+    SELECT `AUTO_INCREMENT`
+    FROM  INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA = 'rasp_watch'
+    AND   TABLE_NAME   = 'messages';
+  ");
+  $insertIndex = mysqli_fetch_assoc($queryResult)["AUTO_INCREMENT"];
+  query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1,'" . mysqli_real_escape_string($dbConn, $_POST["comment"]) . "')");
+
+  echo "<p class='text-success'><a href='messageSingle.php?id={$insertIndex}'>Diese Nachricht</a> wurde hinzugefügt.</p>";
 }
 ?>
 <h3>Dateneingabe</h3>
