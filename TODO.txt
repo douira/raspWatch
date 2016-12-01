@@ -1,6 +1,0 @@
-TODO list:
-+Send mail to all admins with not solved messages (essentially messages.php for each admin) -> daily mail
-+make changing more attributes of messages possible
-+make message input page actually work
-+make message input site more user friendly (teachers should be able to use it)
-+comment code where necessary/ambiguous
