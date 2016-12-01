@@ -96,7 +96,7 @@ function setupUserData() {
 }
 
 //connect to the database and print errors if there are any
-$dbConn = mysqli_connect("localhost", "root", "", "rasp_watch");
+$dbConn = mysqli_connect("localhost", "raspWatch", "jUrk9mlKNdG0upfz", "rasp_watch");
 if (mysqli_connect_errno()) {
   echo "<br>Failed to connect to MySQL: " . mysqli_connect_error();
 }
