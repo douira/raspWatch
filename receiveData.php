@@ -41,11 +41,13 @@
   foreach ($data->messages as $moduleName => $moduleData) {
     $moduleId = $moduleIdNameMap[$moduleName];
     foreach ($moduleData as $message) {
-      if (! $testData) {
-        query("INSERT INTO messages VALUES (0," . $data->ip . "," . $message->time . "," . $message->typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $message->text) . "',0,1,'')"); //status 0 and no assignee (id 1)
-      } else {
+      if ($testData) {
+        //insert test data
         $status = rand(0, 4);
         query("INSERT INTO messages VALUES (0," . rand(0, 10) . "," . $message->time . "," . $message->typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $message->text) . "'," . $status . "," . ($status == 0 ? 1 : rand(2, 4)) . ",'')");
+      } else {
+        //insert all of the received data
+        query("INSERT INTO messages VALUES (0," . $data->ip . "," . $message->time . "," . $message->typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $message->text) . "',0,1,'')"); //status 0 and no assignee (id 1)
       }
     }
   }
