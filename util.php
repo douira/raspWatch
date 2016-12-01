@@ -11,6 +11,8 @@ $userPermName;
 $queryResult;
 $pageLength = 25;
 $pageNum = 0;
+
+//called at the start of all pages, sets up the html of pages
 function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
   if (! $pageTitle) {
     $pageTitle = $pageName;
@@ -28,19 +30,27 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
 <body>
   {$insertBefore}<h1>{$pageName}</h1><a href='index.php'>Startseite</a>";
 }
+
+//called at end of all pages to end the html and do cloaing actions
 function endPage() {
   global $dbConn;
   echo "</body></html>";
   mysqli_close($dbConn);
 }
+
+//prints the user info string given back by setupUserData
 function setupUser() {
   echo setupUserData();
 }
+
+//sets up the user in session and glbal variables
 function setupUserData() {
   global $userId;
   global $userName;
   global $userPermName;
   global $userPerm;
+  
+  //sets user wiwth ids given in get or post
   if (! empty($_GET["userId"])) {
     setUser($_GET["userId"]);
   } else if (! empty($_POST["userName"])) {
@@ -50,6 +60,8 @@ function setupUserData() {
   } else {
     setUser(1);
   }
+  
+  //authenticates users that entered their password and are high permission admins
   if (permIsHigh(adminGetPerm($userId)) && ! empty($_POST["pswd"])) {
     global $queryResult;
     query("SELECT password FROM admin WHERE id={$userId}");
@@ -62,8 +74,11 @@ function setupUserData() {
       }
     }
   }
+  
+  //copy permission name string to local variable
   $userPermName = permName($userPerm);
   
+  //create user info and a few short actions
   $str = "<div style='flow: right; text-align:right;'>";
   if ($userId == 1) {
     $str .= "<a href='setUser.php'>Benutzer wählen</a>";
@@ -76,14 +91,21 @@ function setupUserData() {
   }
   $str .= "</div>";
   
+  //return that string, to be printed in setupUser or printed sometime else when necessary
   return $str;
 }
+
+//connect to the database and print errors if there are any
 $dbConn = mysqli_connect("localhost", "root", "", "rasp_watch");
 if (mysqli_connect_errno()) {
   echo "<br>Failed to connect to MySQL: " . mysqli_connect_error();
 }
 mysqli_set_charset($dbConn, "utf8");
+
+//query puts result into this
 $queryResult = false;
+
+//sends a database query to the database server and puts it into queryResult
 function query($queryString, $logQuerySuccess = false) {
   global $dbConn;
   global $queryResult;
@@ -96,19 +118,28 @@ function query($queryString, $logQuerySuccess = false) {
     exit("<br>MySQL query error: " . mysqli_error($dbConn));
   }
 }
+
+//returns true if the user can be authenticated but hasn't yet (is high perm user)
 function userNeedsAuth() {
   global $userId;
   global $userPerm;
   return permIsHigh(adminGetPerm($userId)) && ! permIsHigh($userPerm);
 }
+
+//returns a url to authenticate and then go back to the current page
 function authURL() {
+  //auth page will send user back to url given in backto
   return "auth.php?backto={$_SERVER['REQUEST_URI']}";
 }
+
+//stops page execution with an error, also closes database
 function endWithError($errorString) {
   global $dbConn;
   mysqli_close($dbConn);
   exit("<br>ERROR: " . $errorString);
 }
+
+//sets the current user (and attributes such as name and perm) for the page in session and global variables
 function setUser($value, $isName = false, $keepAuth = false) {
   global $userId;
   global $userName;
@@ -126,6 +157,8 @@ function setUser($value, $isName = false, $keepAuth = false) {
     $_SESSION["auth"] = false;
   }
 }
+
+//sets the user as authenticated, called after password verification
 function authUser() {
   global $userPerm;
   global $userPermName;
@@ -134,6 +167,8 @@ function authUser() {
   $userPermName = permName($userPerm);
   $_SESSION["auth"] = true;
 }
+
+//returns a 2D array from a query
 function queryToRows($queryString) {
   $rows = [];
   global $queryResult;
@@ -143,6 +178,8 @@ function queryToRows($queryString) {
   }
   return $rows;
 }
+
+//returns string to be displayed to user in tables for given value and datatype
 function getAttribText($message, $name, $textShorten = 0) {
   $str = $message[$name];
   switch ($name) {
@@ -171,6 +208,8 @@ function getAttribText($message, $name, $textShorten = 0) {
   }
   return $str;
 }
+
+//names of databse attribs for user
 $attribNames = [
   "id" => "#",
   "ip" => "Raum",
