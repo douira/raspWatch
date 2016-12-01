@@ -7,7 +7,7 @@ if (! empty($_POST["message"])) {
   if (! $ip) {
     $ip = 0; //will be 'unknown room'
   }
-  $typeId = typeId($_POST["type"]);
+  $typeId = typeIdFromName($_POST["type"]);
   if (! $typeId) {
     $typeId = 0;
   }
