@@ -3,7 +3,9 @@ include "util.php";
 setupPage("Modul");
 setupUser();
 $moduleId = 0;
-if (! empty($_GET["id"])) {
+if (empty($_GET["id"])) {
+  echo "<p class='text-danger'>Keine module id gesendet!</p>";
+} else {
   $moduleId = $_GET["id"];
 }
 $moduleN = moduleName($moduleId);
