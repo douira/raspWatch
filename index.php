@@ -17,7 +17,7 @@ while ($message = mysqli_fetch_assoc($queryResult)) {
     if (! array_key_exists($message["ip"], $roomCounts)) {
       $roomCounts[$message["ip"]] = [];
       foreach ($types as $typeIndex => $typeName) {
-        $roomCounts[$message["ip"]][$typeIndex] = array_fill(0, count($statusNames), 10);
+        $roomCounts[$message["ip"]][$typeIndex] = array_fill(0, count($statusNames), 0);
       }
     }
     $roomCounts[$message["ip"]][$message["typeId"]][$message["statusId"]] ++;
