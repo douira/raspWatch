@@ -13,22 +13,29 @@ getTypes();
 getStatusNames();
 query("SELECT * FROM messages");
 while ($message = mysqli_fetch_assoc($queryResult)) {
-  if (! array_key_exists($message["ip"], $roomCounts)) {
-    $roomCounts[$message["ip"]] = [];
-    foreach ($types as $typeIndex => $typeName) {
-      $roomCounts[$message["ip"]][$typeIndex] = array_fill(0, count($statusNames), 0);
+  if ($message["ip"]) {
+    if (! array_key_exists($message["ip"], $roomCounts)) {
+      $roomCounts[$message["ip"]] = [];
+      foreach ($types as $typeIndex => $typeName) {
+        $roomCounts[$message["ip"]][$typeIndex] = array_fill(0, count($statusNames), 10);
+      }
     }
+    $roomCounts[$message["ip"]][$message["typeId"]][$message["statusId"]] ++;
   }
-  $roomCounts[$message["ip"]][$message["typeId"]][$message["statusId"]] ++;
 }
 $maximum = 0;
+$average = 0;
 $counter = 0;
 function addToAverage($item) {
   global $maximum;
+  global $average;
+  global $counter;
+  $counter ++;
+  $average += $item;
   $maximum = max($maximum, $item);
 }
 array_walk_recursive($roomCounts, "addToAverage");
-$thresh = floor(0.7 * $maximum);
+$thresh = ($maximum + $average / $counter) / 2;
 echo "<br><h3>Geräte mit Aufgaben</h3>";
 echo "<div class='roomTable row'><table class='table-responsive table table-sm table-hover'>";
 echo "<thead class='thead-default'><tr><th>Nachrichtenart</th>";
