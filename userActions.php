@@ -20,7 +20,7 @@ if (permIsHigh($userPerm)) {
     <br>
     <button type='submit' class='btn btn-primary'>Ändern</button>
     </div></form>";
-  echo "<h4>Benutzer löschen</h4>";
+  echo "<h4 class='text-danger'>Benutzer löschen</h4>";
   userList("deleteUser.php?deleteUser=");
 }
 if (userNeedsAuth()) {
