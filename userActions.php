@@ -27,5 +27,8 @@ if (userNeedsAuth()) {
   echo "<h4><a href='" . authURL() . "'>Anmelden</a></h4>";
 }
 echo "<br><h4><a href='setUser.php'>Benutzer wechseln</a></h4>";
+if (userPresent()) {
+  echo "<br><h4><a href='index.php?userId=1'>Abmelden</a></h4>";
+}
 endPage();
 ?>
