@@ -3,6 +3,7 @@ include "util.php";
 setupPage("Aufgaben");
 setupUser();
 
+//message remove get request
 if (! empty($_GET["action"]) && ! empty($_GET["id"])) {
   $id = $_GET["id"];
   switch ($_GET["action"]) {
@@ -13,6 +14,7 @@ if (! empty($_GET["action"]) && ! empty($_GET["id"])) {
   }
 }
 
+//display message table if there is any user present
 if (userPresent()) {
   echo "<h3>Diesem Benutzer zugewiesene Aufgaben:</h3>";
   messageTable(queryToRows("SELECT * FROM messages WHERE assignee = {$userId} AND NOT statusId = 3"), ["assignee"]);
