@@ -158,6 +158,12 @@ function setUser($value, $isName = false, $keepAuth = false) {
   }
 }
 
+//checks if the current user is not the none user (there is a actual user logged in)
+function userPresent() {
+  global $userId;
+  return $userId > 1;
+}
+
 //sets the user as authenticated, called after password verification
 function authUser() {
   global $userPerm;

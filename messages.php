@@ -13,10 +13,14 @@ if (! empty($_GET["action"]) && ! empty($_GET["id"])) {
   }
 }
 
-echo "<h3>Diesem Benutzer zugewiesene Aufgaben:</h3>";
-messageTable(queryToRows("SELECT * FROM messages WHERE assignee = {$userId} AND NOT statusId = 3"), ["assignee"]);
-echo "<h3>Noch nicht zugewiesene oder unvollendete Aufgaben:</h3>";
-messageTable(queryToRows("SELECT * FROM messages WHERE NOT assignee = {$userId} AND (statusId = 0 OR statusId = 4)"));
+if (userPresent()) {
+  echo "<h3>Diesem Benutzer zugewiesene Aufgaben:</h3>";
+  messageTable(queryToRows("SELECT * FROM messages WHERE assignee = {$userId} AND NOT statusId = 3"), ["assignee"]);
+  echo "<h3>Noch nicht zugewiesene oder unvollendete Aufgaben:</h3>";
+  messageTable(queryToRows("SELECT * FROM messages WHERE NOT assignee = {$userId} AND (statusId = 0 OR statusId = 4)"));
+} else {
+  echo "<p class='text-warning'>Kein Benutzer ausgewählt!</p>";
+}
 
 endPage();
 ?>
