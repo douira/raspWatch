@@ -358,6 +358,12 @@ function makeNonBreaking($str) {
   return str_replace(" ", "&nbsp;", $str);
 }
 
+//prints out a bootstrap alert with given text and type
+function makeAlert($message = "<em>nothing to say</em>", $type = "info") {
+  echo "<div class='alert alert-{$type}' role='alert'>{$message}</div>";
+  //<strong>Well done!</strong> You successfully read this important alert message.
+}
+
 //all id to name or the other way mapping functions call the corresponding database query function first if the array is empty
 
 //fills the module name mapping array
