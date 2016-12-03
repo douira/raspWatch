@@ -7,9 +7,11 @@ $("#comment").on("change beforeunload", function() {
   $.post(
     "editComment.php",
     {id: msgId, data: $(this).val()},
+
+    //check response for error
     function (response) {
       if (response !== "OK") {
-        console.log("POST request Error: '" + response + "'");
+        console.log("POST request: '" + response + "'");
       }
     }
   );
