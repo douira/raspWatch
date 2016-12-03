@@ -741,7 +741,7 @@ function assignList($linkPrefix, $showAdmins = true) {
   echo "</div>";
 }
 
-//prints a message stating that authenticfication is required to proceed
+//prints a message stating that authentication is required to proceed
 function loginPlease() {
   makeAlert("<a href='" . authURL() . "'>Authentifizierung</a> erforderlich", "danger", "Fehler!");
 }
