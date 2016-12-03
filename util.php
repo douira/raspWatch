@@ -11,6 +11,8 @@ $userPermName;
 $queryResult;
 $pageLength = 25;
 $pageNum = 0;
+
+//called at the start of all pages, sets up the html of pages
 function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
   if (! $pageTitle) {
     $pageTitle = $pageName;
@@ -28,19 +30,27 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
 <body>
   {$insertBefore}<h1>{$pageName}</h1><a href='index.php'>Startseite</a>";
 }
+
+//called at end of all pages to end the html and do cloaing actions
 function endPage() {
   global $dbConn;
   echo "</body></html>";
   mysqli_close($dbConn);
 }
+
+//prints the user info string given back by setupUserData
 function setupUser() {
   echo setupUserData();
 }
+
+//sets up the user in session and glbal variables
 function setupUserData() {
   global $userId;
   global $userName;
   global $userPermName;
   global $userPerm;
+  
+  //sets user wiwth ids given in get or post
   if (! empty($_GET["userId"])) {
     setUser($_GET["userId"]);
   } else if (! empty($_POST["userName"])) {
@@ -50,6 +60,8 @@ function setupUserData() {
   } else {
     setUser(1);
   }
+  
+  //authenticates users that entered their password and are high permission admins
   if (permIsHigh(adminGetPerm($userId)) && ! empty($_POST["pswd"])) {
     global $queryResult;
     query("SELECT password FROM admin WHERE id={$userId}");
@@ -62,8 +74,11 @@ function setupUserData() {
       }
     }
   }
+  
+  //copy permission name string to local variable
   $userPermName = permName($userPerm);
   
+  //create user info and a few short actions
   $str = "<div style='flow: right; text-align:right;'>";
   if ($userId == 1) {
     $str .= "<a href='setUser.php'>Benutzer wählen</a>";
@@ -76,14 +91,21 @@ function setupUserData() {
   }
   $str .= "</div>";
   
+  //return that string, to be printed in setupUser or printed sometime else when necessary
   return $str;
 }
-$dbConn = mysqli_connect("localhost", "root", "", "rasp_watch");
+
+//connect to the database and print errors if there are any
+$dbConn = mysqli_connect("localhost", "raspWatch", "jUrk9mlKNdG0upfz", "rasp_watch");
 if (mysqli_connect_errno()) {
   echo "<br>Failed to connect to MySQL: " . mysqli_connect_error();
 }
 mysqli_set_charset($dbConn, "utf8");
+
+//query puts result into this
 $queryResult = false;
+
+//sends a database query to the database server and puts it into queryResult
 function query($queryString, $logQuerySuccess = false) {
   global $dbConn;
   global $queryResult;
@@ -96,19 +118,28 @@ function query($queryString, $logQuerySuccess = false) {
     exit("<br>MySQL query error: " . mysqli_error($dbConn));
   }
 }
+
+//returns true if the user can be authenticated but hasn't yet (is high perm user)
 function userNeedsAuth() {
   global $userId;
   global $userPerm;
   return permIsHigh(adminGetPerm($userId)) && ! permIsHigh($userPerm);
 }
+
+//returns a url to authenticate and then go back to the current page
 function authURL() {
+  //auth page will send user back to url given in backto
   return "auth.php?backto={$_SERVER['REQUEST_URI']}";
 }
+
+//stops page execution with an error, also closes database
 function endWithError($errorString) {
   global $dbConn;
   mysqli_close($dbConn);
   exit("<br>ERROR: " . $errorString);
 }
+
+//sets the current user (and attributes such as name and perm) for the page in session and global variables
 function setUser($value, $isName = false, $keepAuth = false) {
   global $userId;
   global $userName;
@@ -126,6 +157,14 @@ function setUser($value, $isName = false, $keepAuth = false) {
     $_SESSION["auth"] = false;
   }
 }
+
+//checks if the current user is not the none user (there is a actual user logged in)
+function userPresent() {
+  global $userId;
+  return $userId > 1;
+}
+
+//sets the user as authenticated, called after password verification
 function authUser() {
   global $userPerm;
   global $userPermName;
@@ -134,6 +173,8 @@ function authUser() {
   $userPermName = permName($userPerm);
   $_SESSION["auth"] = true;
 }
+
+//returns a 2D array from a query
 function queryToRows($queryString) {
   $rows = [];
   global $queryResult;
@@ -143,6 +184,8 @@ function queryToRows($queryString) {
   }
   return $rows;
 }
+
+//returns string to be displayed to user in tables for given value and datatype
 function getAttribText($message, $name, $textShorten = 0) {
   $str = $message[$name];
   switch ($name) {
@@ -171,6 +214,8 @@ function getAttribText($message, $name, $textShorten = 0) {
   }
   return $str;
 }
+
+//names of databse attribs for user
 $attribNames = [
   "id" => "#",
   "ip" => "Raum",
@@ -181,6 +226,8 @@ $attribNames = [
   "time" => "Zeitstempel",
   "message" => "Nachricht"
 ];
+
+//returns values of message attributes for comparing them, these are different from display values!
 function messageCmpAttribValue($message, $cmpAttrib) {
   switch ($cmpAttrib) {
     case "assignee":
@@ -207,6 +254,8 @@ function messageCmpAttribValue($message, $cmpAttrib) {
       return $message[$cmpAttrib];
   }
 }
+
+//returns a function that compares two values using the above function and a list of attributes and the sorting order of each one
 function getMessageAttribCmp($cmpAttribs, $directions) {
   return function($message1, $message2) use ($cmpAttribs, $directions) {
     $attribIndex = 0;
@@ -221,11 +270,16 @@ function getMessageAttribCmp($cmpAttribs, $directions) {
     }
   };
 }
+
+//returns a url to this page with a given page number in GET
 function pageUrl($page) {
   $urlQuery = $_GET;
   $urlQuery["page"] = $page;
   return $_SERVER['PHP_SELF'] . "?" . http_build_query($urlQuery);
 }
+
+//core function that creates a table of messages worted by given attributes
+//attributes can be hidden or used as header sorting attributes by putting it in index 0 of $orderByAttribs
 function messageTable($messageArray, $hideAttribs = [],  $orderByAttribs = ["ip", "statusId", "time", "assignee", "typeId"]) {
   global $attribNames;
   $directions = [];
@@ -298,9 +352,25 @@ function messageTable($messageArray, $hideAttribs = [],  $orderByAttribs = ["ip"
   }
   echo "</b></p>";
 }
+
+//replaces all occurences of a normal space with non-breaking spaces
 function makeNonBreaking($str) {
   return str_replace(" ", "&nbsp;", $str);
 }
+
+//prints out a bootstrap alert with given text and type
+function makeAlert($message = "<em>nothing to say</em>", $type = "info", $startText = false) {
+  echo "<div class='alert alert-{$type}' role='alert'>";
+  if ($startText) {
+    echo "<strong>$startText</strong> ";
+  }
+  echo "{$message}</div>";
+  //<strong>Well done!</strong> You successfully read this important alert message.
+}
+
+//all id to name or the other way mapping functions call the corresponding database query function first if the array is empty
+
+//fills the module name mapping array
 function getModules() {
   global $modules;
   global $queryResult;
@@ -310,6 +380,8 @@ function getModules() {
     $modules[$row["id"]] = $row["name"];
   }
 }
+
+//returns name of given moduleId
 function moduleName($moduleId) {
   global $modules;
   if (empty($modules)) {
@@ -317,6 +389,8 @@ function moduleName($moduleId) {
   }
   return $modules[$moduleId];
 }
+
+//fills the module type mapping array
 function getTypes() {
   global $types;
   global $queryResult;
@@ -326,6 +400,8 @@ function getTypes() {
     $types[$row["id"]] = $row["name"];
   }
 }
+
+//returns name of given typeId
 function typeName($typeId) {
   global $types;
   if (empty($types)) {
@@ -333,6 +409,9 @@ function typeName($typeId) {
   }
   return $types[$typeId];
 }
+
+//fills the status name mapping array
+//there are three names for statuses, a user viewing name, one for bootstrap table colors and one for tags
 function getStatusNames() {
   global $statusNames;
   global $queryResult;
@@ -346,6 +425,8 @@ function getStatusNames() {
     ];
   }
 }
+
+//returns name of given $statusId
 function statusName($statusId) {
   global $statusNames;
   if (empty($statusNames)) {
@@ -353,6 +434,8 @@ function statusName($statusId) {
   }
   return $statusNames[$statusId] -> name;
 }
+
+//returns name of a statusId
 function statusBName($statusId) {
   global $statusNames;
   if (empty($statusNames)) {
@@ -360,6 +443,8 @@ function statusBName($statusId) {
   }
   return $statusNames[$statusId] -> bName;
 }
+
+//returns bootstrap tag name of a statusId
 function statusTagName($statusId) {
   global $statusNames;
   if (empty($statusNames)) {
@@ -367,6 +452,8 @@ function statusTagName($statusId) {
   }
   return $statusNames[$statusId] -> tagName;
 }
+
+//fills the room name mapping array
 function getRooms() {
   global $rooms;
   global $queryResult;
@@ -376,6 +463,8 @@ function getRooms() {
     $rooms[$row["ip"]] = $row["number"];
   }
 }
+
+//returns room name of an ip (as long), includes <em> tag if no such rooms exists
 function roomName($ip) {
   global $rooms;
   if (empty($rooms)) {
@@ -387,6 +476,8 @@ function roomName($ip) {
     return "<em>unbekannter Raum IP: </em>" . long2ip($ip);
   }
 }
+
+//same thing as roomName just without formatting
 function roomNameSimple($ip) {
   global $rooms;
   if (empty($rooms)) {
@@ -398,6 +489,8 @@ function roomNameSimple($ip) {
     return "unbekannter Raum IP: " . long2ip($ip);
   }
 }
+
+//reverse of roomNameSimple, returns ip of given room name
 function roomIpFromName($number) {
   global $rooms;
   if (empty($rooms)) {
@@ -409,7 +502,9 @@ function roomIpFromName($number) {
   }
   return $ip; //returns false on error
 }
-function typeId($name) {
+
+//reverse of typeName
+function typeIdFromName($name) {
   global $types;
   if (empty($types)) {
     getTypes();
@@ -420,6 +515,8 @@ function typeId($name) {
   }
   return $id; //returns false on error
 }
+
+//reverse of moduleName
 function moduleId($name) {
   global $modules;
   if (empty($modules)) {
@@ -431,6 +528,8 @@ function moduleId($name) {
   }
   return $id; //returns false on error
 }
+
+//fills the admin info array
 function getAdmins() {
   global $admins;
   global $queryResult;
@@ -446,6 +545,8 @@ function getAdmins() {
     }
   }
 }
+
+//returns name of given admin id
 function adminName($id) {
   global $admins;
   if (empty($admins)) {
@@ -457,6 +558,8 @@ function adminName($id) {
     return array_key_exists($id, $admins) ? $admins[$id] : "<em>unbekannt</em>";
   }
 }
+
+//reverse of adminName
 function adminId($name) {
   global $admins;
   if (empty($admins)) {
@@ -468,6 +571,8 @@ function adminId($name) {
   }
   return $id ? $id : 1; //1 as default
 }
+
+//gets the permission level a user has, not if the user is authenticated, just if he has the ability to do so
 function adminGetPerm($id) {
   global $perms;
   if (empty($perms)) {
@@ -475,6 +580,8 @@ function adminGetPerm($id) {
   }
   return array_key_exists($id, $perms) ? $perms[$id] : 0;
 }
+
+//returns email address of user
 function adminEmail($id) {
   global $emails;
   if (empty($emails)) {
@@ -482,27 +589,43 @@ function adminEmail($id) {
   }
   return array_key_exists($id, $emails) ? $emails[$id] : "";
 }
+
+//checks if a permission level is elevated/high
 function permIsHigh($permLevel) {
   return $permLevel > 0;
 }
+
+//gets the permission level name for a permission level
 function permName($permLevel) {
   return permIsHigh($permLevel) ? "Administrator" : "Benutzer";
 }
+
+//gets permName() for a given admin
 function adminGetPermName($id) {
   return permName(adminGetPerm($id));
 }
+
+//returns html for a bootstrap tag containing the permission level name color accordingly
 function permTag($permLevel) {
   return "<span class='tag tag-pill " . (permIsHigh($permLevel) ? "tag-success" : "tag-default") . "'>" . permName($permLevel) . "</span>";
 }
+
+//formats a unix time using just the date (no time)
 function formatDate($unixTime) {
   return date("D d.m.Y", $unixTime);
 }
+
+//formats a unix time including date and time
 function formatTime($unixTime) {
   return date("D d.m.Y H:i:s", $unixTime);
 }
+
+//returns the formatted date and time of a message (attrib data array)
 function messageTime($message) {
   return formatTime($message["time"]);
 }
+
+//formats a number of bytes into a nicely readable string with a magnitude suffix
 function formatBytes($bytes, $precision = 2) { //from php.net
   $units = array('B', 'KB', 'MB', 'GB', 'TB');
   $bytes = max($bytes, 0);
@@ -514,6 +637,8 @@ function formatBytes($bytes, $precision = 2) { //from php.net
   
   return round($bytes, $precision) . ' ' . $units[$pow];
 }
+
+//transforms an array f ids into a sql WHERE clause that accepts any of the given ids
 function idsToWhere($ids) {
   $str = " WHERE ";
   if (is_array($ids)) {
@@ -531,7 +656,9 @@ function idsToWhere($ids) {
   }
   return $str;
 }
-function updateTask($id, $attribValues, $whereClause = null) {
+
+//sends a sql query to modify messages with the given ids to have values as in the array $attribValues
+function updateTask($ids, $attribValues, $whereClause = null) {
   $str = "UPDATE messages SET ";
   $first = true;
   foreach ($attribValues as $attrib => $newValue) {
@@ -543,27 +670,37 @@ function updateTask($id, $attribValues, $whereClause = null) {
     $str .= "{$attrib}='{$newValue}'";
   }
   if (is_null($whereClause)) {
-    $str .= idsToWhere($id);
+    $str .= idsToWhere($ids);
   } else {
     $str .= $whereClause;
   }
   //echo $str;
   query($str);
 }
+
+//bounds a number between a maximum and minimum
 function bound($x, $min, $max) {
   return min(max($x, $min), $max);
-} 
+}
+
+//gets a message data row from the database
 function getMessage($id) {
   global $queryResult;
   query("SELECT * FROM messages WHERE id='{$id}'");
   return mysqli_fetch_assoc($queryResult);
 }
+
+//assigns a task to nobody
 function unassignTask($id) {
   updateTask($id, ["assignee" => 1, "statusId" => 0]);
 }
+
+//assigns a task to somebody
 function assignTask($id, $toAdmin) {
   updateTask($id, ["assignee" => $toAdmin, "statusId" => max(1, getMessage($id)["statusId"])]);
 }
+
+//sets the status of a task and updates the assignee accordingly
 function setTaskStatus($id, $newStatus, $useAdmin = null) {
   $newStatus = bound($newStatus, 0, 4);
   if ($newStatus == 0) {
@@ -574,9 +711,13 @@ function setTaskStatus($id, $newStatus, $useAdmin = null) {
     updateTask($id, ["statusId" => $newStatus]);
   }
 }
+
+//deletes a certain task
 function deleteTask($id) {
   query("DELETE FROM messages WHERE id='{$id}'");
 }
+
+//echos a bootstrap user list with a each item linking to a page starting ith a given url and ending in the corresponding userId
 function userList($linkPrefix, $showAdmins = true, $showNormal = true) {
   getAdmins();
   global $admins;
@@ -592,14 +733,20 @@ function userList($linkPrefix, $showAdmins = true, $showNormal = true) {
   }
   echo "</div>";
 }
+
+//creates a user list assigns to users
 function assignList($linkPrefix, $showAdmins = true) {
   echo "<div class='col-md-4'><h3>Benutzer zuweisen</h3>";
   userList($linkPrefix . "action=assign&assignee=", $showAdmins);
   echo "</div>";
 }
+
+//prints a message stating that authenticfication is required to proceed
 function loginPlease() {
-  echo "Fehler: <a href='" . authURL() . "'>Authentifizierung</a> erforderlich!";
+  makeAlert("<a href='" . authURL() . "'>Authentifizierung</a> erforderlich", "danger", "Fehler!");
 }
+
+//deletes a user from the database
 function deleteUser() {
   if (! empty($_POST["deleteUser"]) && $_POST["deleteUser"] > 0) {
     $id = $_POST["deleteUser"];

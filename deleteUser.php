@@ -7,18 +7,18 @@ if (permIsHigh($userPerm)) {
     getAdmins();
     $id = $_GET["deleteUser"];
     if (array_key_exists($id, $admins)) {
-      echo "<p style='color: red;'>Willst du wirklich Benutzer " . adminName($id) . " löschen?</p>";
+      echo "<p class='text-danger'>Willst du Benutzer " . adminName($id) . " wirklich löschen?</p>";
       echo "<form action='userActions.php' method='post'>";
       echo "<input type='hidden' name='deleteUser' value='{$id}'>";
       echo "<button type='submit' class='btn btn-danger'>Benutzer löschen</button></form>";
     } else {
-      echo "Benuzter mit ID {$id} gibt es nicht.";
+      makeAlert("Benuzter mit ID {$id} gibt es nicht.", "info", "Information:");
     }
   } else {
-    echo "Kein Benutzer angegeben.";
+    makeAlert("Kein Benutzer angegeben", "danger", "Fehler!");
   }
 } else {
-  echo "Nicht berechtigt!";
+  makeAlert("Nicht berechtigt", "danger", "Fehler!");
 }
 
 endPage();

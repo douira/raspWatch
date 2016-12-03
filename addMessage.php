@@ -7,7 +7,7 @@ if (! empty($_POST["message"])) {
   if (! $ip) {
     $ip = 0; //will be 'unknown room'
   }
-  $typeId = typeId($_POST["type"]);
+  $typeId = typeIdFromName($_POST["type"]);
   if (! $typeId) {
     $typeId = 0;
   }
@@ -15,7 +15,15 @@ if (! empty($_POST["message"])) {
   if (! $moduleId) {
     $moduleId = 0;
   }
-  query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1," . mysqli_real_escape_string($dbConn, $_POST["comment"]) . ")");
+  query("
+    SELECT `AUTO_INCREMENT`
+    FROM  INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA = 'rasp_watch'
+    AND   TABLE_NAME   = 'messages';
+  ");
+  $insertIndex = mysqli_fetch_assoc($queryResult)["AUTO_INCREMENT"];
+  query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1,'" . mysqli_real_escape_string($dbConn, $_POST["comment"]) . "')");
+  makeAlert("<a href='messageSingle.php?id={$insertIndex}'>Nachricht</a> wurde hinzugefügt", "sucess", "Erfolg!");
 }
 ?>
 <h3>Dateneingabe</h3>
