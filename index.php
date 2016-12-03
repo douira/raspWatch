@@ -2,34 +2,39 @@
 include "util.php";
 setupPage("Überblick");
 setupUser();
-if ($userId > 1) {
+if (userPresent()) {
   echo "<h4><a href='messages.php'>Aufgaben</a></h4>";
   echo "<h4><a href='setPswd.php'>Passwort ändern</a></h4>";
 }
 echo "<h4><a href='addMessage.php'>Nachricht hinzufügen</a></h4>";
 echo "<h4><a href='setUser.php'>Benutzer auswählen</a></h4>";
-query("SELECT * FROM messages");
 $roomCounts = [];
-$countedTypes = [];
-//getStatusNames();
+getTypes();
+getStatusNames();
+query("SELECT * FROM messages");
 while ($message = mysqli_fetch_assoc($queryResult)) {
   if (! array_key_exists($message["ip"], $roomCounts)) {
     $roomCounts[$message["ip"]] = [];
+    foreach ($types as $typeIndex => $typeName) {
+      $roomCounts[$message["ip"]][$typeIndex] = array_fill(0, count($statusNames), 0);
+    }
   }
-  if (! array_key_exists($message["typeId"], $roomCounts[$message["ip"]])) {
-    $roomCounts[$message["ip"]][$message["typeId"]] = [0, 0, 0, 0, 0]; //array_fill(0, count($statusNames), 0);
-    $countedTypes[$message["typeId"]] = true;
-  }
-  /*if (! array_key_exists($message["statusId"], $roomCounts[$message["ip"]][$message["typeId"]])) {
-    $roomCounts[$message["ip"]][$message["typeId"]][$message["statusId"]] = [];
-  }*/
   $roomCounts[$message["ip"]][$message["typeId"]][$message["statusId"]] ++;
 }
+$maximum = 0;
+$counter = 0;
+function addToAverage($item) {
+  global $maximum;
+  $maximum = max($maximum, $item);
+}
+array_walk_recursive($roomCounts, "addToAverage");
+$thresh = floor(0.7 * $maximum);
 echo "<br><h3>Geräte mit Aufgaben</h3>";
 echo "<div class='roomTable row'><table class='table-responsive table table-sm table-hover'>";
 echo "<thead class='thead-default'><tr><th>Nachrichtenart</th>";
-foreach ($countedTypes as $typeId => $x) {
-  echo "<th>" . typeName($typeId) . "</th>";
+getTypes();
+foreach ($types as $typeName) {
+  echo "<th>" . $typeName . "</th>";
 }
 echo "</tr></thead><tbody>";
 foreach ($roomCounts as $ip => $typeCounts) {
@@ -37,10 +42,24 @@ foreach ($roomCounts as $ip => $typeCounts) {
   echo "<td>" . roomName($ip) . "</td>";
   foreach ($typeCounts as $type => $statusCounts) {
     echo "<td>";
+    $displayPart = array_sum($statusCounts);
     foreach ($statusCounts as $statusId => $count) {
-      //if ($count > 0) {
-        echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . "'>$count</span>&nbsp;";
-      //}
+      echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . "' style='font-family:Monospace;";
+      if ($count >= $thresh) {
+        echo "border-color:black; border-style:solid; border-width:3px; margin:0.4px;";
+      } else {
+        if (! $count) {
+          echo "background-color:lightgrey;";
+        }
+        echo "margin:3.4px;";
+      }
+      echo "padding:5px;";
+      if (! $displayPart) {
+        echo "visibility:hidden;";
+      }
+
+      echo "'>" . ($count ? $count : "&nbsp");
+      echo "</span>";
     }
     echo "</td>";
   }
