@@ -359,8 +359,12 @@ function makeNonBreaking($str) {
 }
 
 //prints out a bootstrap alert with given text and type
-function makeAlert($message = "<em>nothing to say</em>", $type = "info") {
-  echo "<div class='alert alert-{$type}' role='alert'>{$message}</div>";
+function makeAlert($message = "<em>nothing to say</em>", $type = "info", $startText = false) {
+  echo "<div class='alert alert-{$type}' role='alert'>";
+  if ($startText) {
+    echo "<strong>$startText</strong> ";
+  }
+  echo "{$message}</div>";
   //<strong>Well done!</strong> You successfully read this important alert message.
 }
 
