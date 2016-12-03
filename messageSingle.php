@@ -53,36 +53,39 @@ if (empty($_GET["id"])) {
   echo "<h3>Kommentare</h3>";
   if (permIsHigh($userPerm)) {
     echo "<p hidden id='msgId'>{$id}</p>";
-    echo "<textarea class='form-control' rows='11' id='comment'>{$message["comment"]}</textarea>";
+    echo "<textarea class='form-control' rows='11' id='comment' placeholder='Text eingeben...'>{$message["comment"]}</textarea>";
     echo "<script src='https://cdn.jsdelivr.net/jquery/3.0.0/jquery.min.js'></script><script src='editComment.js'></script>";
-  } else {
+  } else if ($message["comment"]) {
     echo "<p>{$message["comment"]}</p>";
+  } else {
+    echo "<p><em>kein Kommentar</em></p>";
   }
   echo "</div>";
   echo "</div>";
 
   $linkPrefix = "messageSingle.php?id={$id}&";
-  echo "<div class='row'><div class='col-md-4'><h3>Aktionen</h3>";
-  if (permIsHigh($userPerm) || ! adminGetPerm($userId)) {
-    echo "<div class='list-group'>";
-    $statusId = $message["statusId"];
+  if (userPresent()) {
+    echo "<div class='row'><div class='col-md-4'><h3>Aktionen</h3>";
+    if (permIsHigh($userPerm) || ! adminGetPerm($userId)) {
+      echo "<div class='list-group'>";
+      $statusId = $message["statusId"];
 
-    echo "<a class='list-group-item list-group-item-action list-group-item-info' href='{$linkPrefix}action=assign&assignee={$userId}'>Selbst zuweisen</a>";
-    if (permIsHigh($userPerm)) {
-      echo "<a class='list-group-item list-group-item-action yellow-item' href='{$linkPrefix}action=unassign'>Niemandem zuweisen</a>";
+      echo "<a class='list-group-item list-group-item-action list-group-item-info' href='{$linkPrefix}action=assign&assignee={$userId}'>Selbst zuweisen</a>";
+      if (permIsHigh($userPerm)) {
+        echo "<a class='list-group-item list-group-item-action yellow-item' href='{$linkPrefix}action=unassign'>Niemandem zuweisen</a>";
+      }
+      if ($statusId != 4) {
+        echo "<a class='list-group-item list-group-item-action table-assigned table-assigned-color-text' href='{$linkPrefix}action=statusUpdate&statusId=2'>Bearbeitung starten</a>";
+      }
+      echo "<a class='list-group-item list-group-item-action list-group-item-success' href='{$linkPrefix}action=statusUpdate&statusId=3'>Fertigstellen</a>";
+      if (permIsHigh($userPerm)) {
+        echo "<a class='list-group-item list-group-item-action list-group-item-danger' href='messages.php?id={$id}&action=delete'>Löschen</a>";
+      }
+      echo "<a class='list-group-item list-group-item-action list-group-item-danger' href='{$linkPrefix}action=statusUpdate&statusId=4'>Als unvollendet markieren</a>";
+      echo "</div>";
+    } else {
+      loginPlease();
     }
-    if ($statusId != 4) {
-      echo "<a class='list-group-item list-group-item-action table-assigned table-assigned-color-text' href='{$linkPrefix}action=statusUpdate&statusId=2'>Bearbeitung starten</a>";
-    }
-    echo "<a class='list-group-item list-group-item-action list-group-item-success' href='{$linkPrefix}action=statusUpdate&statusId=3'>Fertigstellen</a>";
-    if (permIsHigh($userPerm)) {
-      echo "<a class='list-group-item list-group-item-action list-group-item-danger' href='messages.php?id={$id}&action=delete'>Löschen</a>";
-    }
-    echo "<a class='list-group-item list-group-item-action list-group-item-danger' href='{$linkPrefix}action=statusUpdate&statusId=4'>Als unvollendet markieren</a>";
-    echo "</div>";
-
-  } else {
-    loginPlease();
   }
   echo "</div>";
   if (permIsHigh($userPerm)) {
