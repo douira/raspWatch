@@ -743,7 +743,7 @@ function assignList($linkPrefix, $showAdmins = true) {
 
 //prints a message stating that authenticfication is required to proceed
 function loginPlease() {
-  echo "<p class='text-danger'><a href='" . authURL() . "'>Authentifizierung</a> erforderlich!</p>";
+  makeAlert("<a href='" . authURL() . "'>Authentifizierung</a> erforderlich", "danger", "Fehler!");
 }
 
 //deletes a user from the database

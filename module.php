@@ -4,7 +4,7 @@ setupPage("Modul");
 setupUser();
 $moduleId = 0;
 if (empty($_GET["id"])) {
-  echo "<p class='text-danger'>Keine module id gesendet!</p>";
+  makeAlert("Keine Modul ID gesendet", "danger", "Fehler!");
 } else {
   $moduleId = $_GET["id"];
 }

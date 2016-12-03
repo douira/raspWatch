@@ -3,7 +3,7 @@ include "util.php";
 setupPage("Nachricht");
 setupUser();
 if (empty($_GET["id"])) {
-  echo "<p class='text-danger'>Keine message id gesendet!</p>";
+  makeAlert("Keine Nachrichen ID gesendet", "danger", "Fehler!");
 } else {
   $id = $_GET["id"];
 
@@ -12,18 +12,18 @@ if (empty($_GET["id"])) {
       case "statusUpdate":
         if (isset($_GET["statusId"])) {
           setTaskStatus($id, $_GET["statusId"], $userId);
-          echo "<p class='text-success'>Status wurde geändert.</p>";
+          makeAlert("Status wurde geändert.", "sucess", "Erfolg!");
         }
         break;
       case "assign":
         if (! empty($_GET["assignee"])) {
           assignTask($id, $_GET["assignee"]);
-          echo "<p class='text-success'>Beauftrager wurde geändert.</p>";
+          makeAlert("Beauftrager wurde geändert.", "sucess", "Erfolg!");
         }
         break;
       case "unassign":
         unassignTask($id);
-        echo "<p class='text-success'>Beauftrager wurde hiervon entfernt.</p>";
+        makeAlert("Beauftrager wurde entfernt.", "sucess", "Erfolg!");
         break;
     }
   }

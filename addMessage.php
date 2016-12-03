@@ -23,8 +23,7 @@ if (! empty($_POST["message"])) {
   ");
   $insertIndex = mysqli_fetch_assoc($queryResult)["AUTO_INCREMENT"];
   query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1,'" . mysqli_real_escape_string($dbConn, $_POST["comment"]) . "')");
-
-  echo "<p class='text-success'><a href='messageSingle.php?id={$insertIndex}'>Diese Nachricht</a> wurde hinzugefügt.</p>";
+  makeAlert("<a href='messageSingle.php?id={$insertIndex}'>Nachricht</a> wurde hinzugefügt", "sucess", "Erfolg!");
 }
 ?>
 <h3>Dateneingabe</h3>

@@ -7,12 +7,17 @@ if (! permIsHigh($userPerm)) {
 } else {
   $pswdSetSucess = false;
   if (! empty($_POST["pswdSet"]) && ! empty($_POST["pswdRep"])) {
-    if ($_POST["pswdSet"] === $_POST["pswdRep"]) {
-      $pswdSetSucess = true;
-      query("UPDATE admin SET password={$_POST["pswdSet"]} WHERE id={$userId}");
-      echo "<p class='text-success'>Passwort geändert!</p>";
+    $newPswd = $_POST["pswdSet"];
+    if ($newPswd === $_POST["pswdRep"]) {
+      if (strlen($newPswd) >= 8) {
+        $pswdSetSucess = true;
+        query("UPDATE admin SET password={$newPswd} WHERE id={$userId}");
+        makeAlert("Passwort geändert", "success", "Erfolg!");
+      } else {
+        makeAlert("Das Passwort ist zu kurz. Passwörter müssen mindestens 8 Zeichen lang sein.", "warning", "Warnung:");
+      }
     } else {
-      echo "<p class='text-danger'>Passwörter stimmen nicht überein!</p>";
+      makeAlert("Passwörter stimmen nicht überein", "warning", "Warnung:");
     }
   }
   if (! $pswdSetSucess) {

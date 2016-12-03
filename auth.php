@@ -3,9 +3,9 @@ include "util.php";
 setupPage("Authentifizierung");
 setupUser();
 if (permIsHigh($userPerm)) {
-  echo "<p class='text-warning'>Schon authentifiziert.</p>";
+  makeAlert("Schon authentifiziert", "info", "Info:");
 } else if (! permIsHigh(adminGetPerm($userId))) {
-  echo "<p class='text-danger'>Benutzer ist nicht Administrator.</p>";
+  makeAlert("Benutzer ist nicht Administrator und kann nicht authentifiziert werden.", "warning", "Warnung:");
 } else {
   echo "<h3>Anmelden:</h3>";
   if (empty($_GET["backto"])) {
