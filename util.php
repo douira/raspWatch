@@ -164,7 +164,7 @@ function query($queryString, $logQuerySuccess = false) {
   $queryResult = mysqli_query($dbConn, $queryString);
   if ($queryResult) {
     if ($logQuerySuccess) {
-      echo "<br>Sucessfully executed {$queryString}";
+      echo "<br>Successfully executed {$queryString}";
     }
   } else {
     exit("<br>MySQL query error: " . mysqli_error($dbConn));

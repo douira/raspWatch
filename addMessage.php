@@ -42,7 +42,7 @@ if (! empty($_POST["message"])) {
 
   //add message with auto increment index (0), status 0 (unassigned) and assignee 1 (none), escape strings where necessary
   query("INSERT INTO messages VALUES (0," . $ip . "," . time() . "," . $typeId . "," . $moduleId . ",'" . mysqli_real_escape_string($dbConn, $_POST["message"]) . "',0,1,'" . mysqli_real_escape_string($dbConn, $_POST["comment"]) . "')");
-  makeAlert("<a href='messageSingle.php?id={$insertIndex}'>Nachricht</a> wurde hinzugefügt", "sucess", "Erfolg!");
+  makeAlert("<a href='messageSingle.php?id={$insertIndex}'>Nachricht</a> wurde hinzugefügt", "success", "Erfolg!");
 }
 ?>
 <h3>Dateneingabe</h3>

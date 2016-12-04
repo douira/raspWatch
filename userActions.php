@@ -7,7 +7,7 @@ if (permIsHigh($userPerm)) {
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
       query("UPDATE admin SET email={$email} WHERE id={$userId}");
-      makeAlert("Email zu '{$email}' geändert", "sucess", "Erfolg!");
+      makeAlert("Email zu '{$email}' geändert", "success", "Erfolg!");
     } else {
       makeAlert("Email '{$email}' ungültig", "danger", "Fehler!");
     }

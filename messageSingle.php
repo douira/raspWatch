@@ -12,18 +12,18 @@ if (empty($_GET["id"])) {
       case "statusUpdate":
         if (isset($_GET["statusId"])) {
           setTaskStatus($id, $_GET["statusId"], $userId);
-          makeAlert("Status wurde geändert.", "sucess", "Erfolg!");
+          makeAlert("Status wurde geändert.", "success", "Erfolg!");
         }
         break;
       case "assign":
         if (! empty($_GET["assignee"])) {
           assignTask($id, $_GET["assignee"]);
-          makeAlert("Beauftrager wurde geändert.", "sucess", "Erfolg!");
+          makeAlert("Beauftrager wurde geändert.", "success", "Erfolg!");
         }
         break;
       case "unassign":
         unassignTask($id);
-        makeAlert("Beauftrager wurde entfernt.", "sucess", "Erfolg!");
+        makeAlert("Beauftrager wurde entfernt.", "success", "Erfolg!");
         break;
     }
   }
