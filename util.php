@@ -525,7 +525,7 @@ function roomName($ip) {
   if (array_key_exists($ip, $rooms)) {
     return "Raum {$rooms[$ip]}";
   } else {
-    return "<em>unbekannter Raum IP: </em>" . long2ip($ip);
+    return "<em>Raum mit IP: </em>" . long2ip($ip);
   }
 }
 
@@ -538,7 +538,7 @@ function roomNameSimple($ip) {
   if (array_key_exists($ip, $rooms)) {
     return "Raum {$rooms[$ip]}";
   } else {
-    return "unbekannter Raum IP: " . long2ip($ip);
+    return "Raum mit IP: " . long2ip($ip);
   }
 }
 
