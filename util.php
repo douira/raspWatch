@@ -17,24 +17,31 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
   if (! $pageTitle) {
     $pageTitle = $pageName;
   }
-  echo "<!DOCTYPE html>
-<html>
-<head>
-  <title>{$pageName} | RaspWatch</title>
-  <meta charset='utf-8'>
-  <meta name='author' content='Christopher Walther'>
-  <meta name='editor' content='brackets'>
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css' integrity='sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj' crossorigin='anonymous'>
-  <link rel='stylesheet' type='text/css' href='style.css'>
-</head>
-<body>
-  {$insertBefore}<h1>{$pageName}</h1><a href='index.php'>Startseite</a>";
+  //start document
+  echo "<!DOCTYPE html><html><head>";
+
+  //add title text
+  echo "<title>{$pageTitle} | RaspWatch</title>";
+
+  //other, static head parts
+  include("header content.html");
+
+  //end of head and start of body
+  echo "</head><body>";
+
+  //page title and icon
+  echo "<div class='row'><div class='col-md-2'>";
+  echo "<img class='m-x-auto d-block' src='favicon-96x96.png' alt='icon image'>";
+  echo "<span class='text-xs-center'>{$insertBefore}<h1>{$pageName}</h1></span>";
+  echo "</div>";
+
+  echo "<div class='col-md-10'><a href='index.php'>Startseite</a>";
 }
 
 //called at end of all pages to end the html and do cloaing actions
 function endPage() {
   global $dbConn;
-  echo "</body></html>";
+  echo "</div></div></body></html>";
   mysqli_close($dbConn);
 }
 
