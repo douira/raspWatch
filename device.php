@@ -32,7 +32,8 @@ if (! empty($_GET["ip"])) {
     messageTable(queryToRows("SELECT * FROM messages WHERE ip={$ip} AND NOT statusId=3"), ["ip"], ["statusId", "time", "assignee", "typeId"]);
   }
 } else {
-  setupPage("Fehler: Keine IP-Adresse gesendet!");
+  setupPage("Fehler!");
+  makeAlert("Keine IP-Adresse gesendet", "danger", "Fehler!");
 }
 endPage();
 ?>
