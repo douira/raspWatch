@@ -32,7 +32,7 @@ if (empty($_GET["id"])) {
   query("SELECT * FROM messages WHERE id = '{$id}'");
   $message = mysqli_fetch_assoc($queryResult);
 
-  echo "<div class='col-md-4'>";
+  echo "<div class='col-lg-5'>";
   echo "<h3>Info</h3>";
   echo "<table class='table table-bordered'>";
   echo "<tr><td>Gerät</td><td>in <a href='device.php?ip={$message["ip"]}'>" . roomName($message["ip"]) . "</a></td></tr>";
@@ -45,7 +45,7 @@ if (empty($_GET["id"])) {
   echo "</table>";
   echo "</div>";
 
-  echo "<div class='col-md-8'>";
+  echo "<div class='col-lg-7'>";
   echo "<h3>Beschreibung</h3>";
   echo "<p><samp>{$message["message"]}</samp></p>";
   

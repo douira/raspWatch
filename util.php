@@ -35,7 +35,7 @@ function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   echo "</head><body>";
 
   //page title and icon
-  echo "<div class='row'><div class='col-md-2'>";
+  echo "<div class='row'><div class='col-lg-2'>";
   echo "<a href='index.php' title='Startseite'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
   echo "<span class='text-xs-center dont-break-out'><h1>{$pageName}</h1></span>";
 
@@ -46,10 +46,10 @@ function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   makeNavItems();
 
   //end of nav and sidebar
-  echo "</ul></nav></div>";
+  echo "</ul></nav><br></div>";
 
   //start content container
-  echo "<div class='col-md-10'>";
+  echo "<div class='col-lg-10'>";
 }
 
 //adds a nav item
