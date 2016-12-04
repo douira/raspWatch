@@ -1,7 +1,7 @@
 <?php
 if (__FILE__ == realpath($_SERVER['SCRIPT_FILENAME'])) {
   header("Location: index.php", true, 301);
-  die("untilphp is not to be acessed directly!");
+  die("until.php is not to be acessed directly!");
 }
 session_start();
 $userId = 1;
