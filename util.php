@@ -32,29 +32,40 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
   //page title and icon
   echo "<div class='row'><div class='col-md-2'>";
   echo "<a href='index.php'><img class='m-x-auto d-block' src='favicon-96x96.png' alt='icon image'></a>";
-  echo "<span class='text-xs-center'>{$insertBefore}<h1>{$pageName}</h1></span>";
+  echo "<span class='text-xs-center dont-break-out'>{$insertBefore}<h1>{$pageName}</h1></span>";
 
-  //user info
+  //start nav
+  echo "<nav class='navbar navbar-light bg-faded'><ul class='nav navbar-nav' role='navigation'>";
+
+  //user info, also adds some nav items
   echo setupUserData();
 
   //navigation links
-  makeNav();
+  makeNavItems();
 
-  //end of sidebar
-  echo "</div>";
+  //end of nav and sidebar
+  echo "</ul></nav></div>";
 
   //start content container
-  echo "<div class='col-md-10'>"; //<a href='index.php'>Startseite</a>";
+  echo "<div class='col-md-10'>";
+}
+
+//adds a nav item
+function addNavItem($url, $name) {
+  echo "<li class='navbar-item'><a class='nav-link' href='{$url}'>{$name}</a></li>";
 }
 
 //prints out the current nav links
-function makeNav() {
+function makeNavItems() {
   if (userPresent()) {
-  echo "<h4><a href='messages.php'>Aufgaben</a></h4>";
-  echo "<h4><a href='setPswd.php'>Passwort ändern</a></h4>";
+    addNavItem("messages.php", "Aufgaben");
+    addNavItem("setPswd.php", "Passwort ändern");
   }
-  echo "<h4><a href='addMessage.php'>Nachricht hinzufügen</a></h4>";
-  echo "<h4><a href='setUser.php'>Benutzer auswählen</a></h4>";
+  addNavItem("addMessage.php", "Nachricht hinzufügen");
+  addNavItem("setUser.php", "Benutzer wechseln");
+  if (userPresent()) {
+    addNavItem("index.php?userId=1", "Abmelden");
+  }
 }
 
 //called at end of all pages to end the html and do cloaing actions
@@ -99,21 +110,16 @@ function setupUserData() {
   //copy permission name string to local variable
   $userPermName = permName($userPerm);
   
-  //create user info and a few short actions
-  $str = "<div style='flow: right; text-align:right;'>";
+  //create user info and actions
   if ($userId == 1) {
-    $str .= "<a href='setUser.php'>Benutzer wählen</a>";
+    addNavItem("setUser.php", "Benutzer wählen");
   } else {
-    $str .= "{$userPermName}: <a href='user.php'>{$userName}</a> |";
-    $str .= " <a href='userActions.php'>Aktionen</a>";
+    echo "<p class='text-xs-center'>{$userPermName}: <a href='user.php'>{$userName}</a></p>";
+    addNavItem("userActions.php", "Benutzeraktionen");
   }
   if (userNeedsAuth($userId)) {
-    $str .= " | <a href='" . authURL() . "'>anmelden</a>";
+    addNavItem(authURL(), "Anmelden");
   }
-  $str .= "</div>";
-  
-  //return that string, to be printed in setupUser or printed sometime else when necessary
-  return $str;
 }
 
 //connect to the database and print errors if there are any
