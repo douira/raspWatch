@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Nachricht");
-setupUser();
+
 if (empty($_GET["id"])) {
   makeAlert("Keine Nachrichen ID gesendet", "danger", "Fehler!");
 } else {
@@ -12,18 +12,18 @@ if (empty($_GET["id"])) {
       case "statusUpdate":
         if (isset($_GET["statusId"])) {
           setTaskStatus($id, $_GET["statusId"], $userId);
-          makeAlert("Status wurde geändert.", "sucess", "Erfolg!");
+          makeAlert("Status wurde geändert.", "success", "Erfolg!");
         }
         break;
       case "assign":
         if (! empty($_GET["assignee"])) {
           assignTask($id, $_GET["assignee"]);
-          makeAlert("Beauftrager wurde geändert.", "sucess", "Erfolg!");
+          makeAlert("Beauftrager wurde geändert.", "success", "Erfolg!");
         }
         break;
       case "unassign":
         unassignTask($id);
-        makeAlert("Beauftrager wurde entfernt.", "sucess", "Erfolg!");
+        makeAlert("Beauftrager wurde entfernt.", "success", "Erfolg!");
         break;
     }
   }
@@ -32,7 +32,7 @@ if (empty($_GET["id"])) {
   query("SELECT * FROM messages WHERE id = '{$id}'");
   $message = mysqli_fetch_assoc($queryResult);
 
-  echo "<div class='col-md-4'>";
+  echo "<div class='col-lg-5'>";
   echo "<h3>Info</h3>";
   echo "<table class='table table-bordered'>";
   echo "<tr><td>Gerät</td><td>in <a href='device.php?ip={$message["ip"]}'>" . roomName($message["ip"]) . "</a></td></tr>";
@@ -45,7 +45,7 @@ if (empty($_GET["id"])) {
   echo "</table>";
   echo "</div>";
 
-  echo "<div class='col-md-8'>";
+  echo "<div class='col-lg-7'>";
   echo "<h3>Beschreibung</h3>";
   echo "<p><samp>{$message["message"]}</samp></p>";
   

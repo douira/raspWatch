@@ -3,7 +3,7 @@ include "util.php";
 if (! empty($_GET["ip"])) {
   $ip = $_GET["ip"];
   setupPage("Gerät in " . roomNameSimple($ip));
-  setupUser();
+
   getRooms();
   if (array_key_exists($_GET["ip"], $rooms)) {
     $memQuery = queryToRows("SELECT memory FROM status WHERE ip={$ip} ORDER BY time DESC LIMIT 1");
@@ -32,7 +32,8 @@ if (! empty($_GET["ip"])) {
     messageTable(queryToRows("SELECT * FROM messages WHERE ip={$ip} AND NOT statusId=3"), ["ip"], ["statusId", "time", "assignee", "typeId"]);
   }
 } else {
-  setupPage("Fehler: Keine IP-Adresse gesendet!");
+  setupPage("Fehler!");
+  makeAlert("Keine IP-Adresse gesendet", "danger", "Fehler!");
 }
 endPage();
 ?>

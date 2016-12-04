@@ -1,7 +1,7 @@
 <?php
 if (__FILE__ == realpath($_SERVER['SCRIPT_FILENAME'])) {
   header("Location: index.php", true, 301);
-  die("untilphp is not to be acessed directly!");
+  die("until.php is not to be acessed directly!");
 }
 session_start();
 $userId = 1;
@@ -13,37 +13,105 @@ $pageLength = 25;
 $pageNum = 0;
 
 //called at the start of all pages, sets up the html of pages
-function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
+function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   if (! $pageTitle) {
     $pageTitle = $pageName;
   }
-  echo "<!DOCTYPE html>
-<html>
-<head>
-  <title>{$pageName} | RaspWatch</title>
-  <meta charset='utf-8'>
-  <meta name='author' content='Christopher Walther'>
-  <meta name='editor' content='brackets'>
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css' integrity='sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj' crossorigin='anonymous'>
-  <link rel='stylesheet' type='text/css' href='style.css'>
-</head>
-<body>
-  {$insertBefore}<h1>{$pageName}</h1><a href='index.php'>Startseite</a>";
+  //start document
+  echo "<!DOCTYPE html><html><head>";
+
+  //add title text
+  echo "<title>{$pageTitle} | RaspWatch</title>";
+
+  //other, static head parts
+  include("header content.html");
+
+  //use given additional headers
+  if ($additionalHeaders) {
+    echo $additionalHeaders;
+  }
+
+  //end of head and start of body
+  echo "</head><body>";
+
+  //page title and icon
+  echo "<div class='row'><div class='col-lg-2'>";
+  echo "<a href='index.php' title='Startseite'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
+  echo "<span class='text-xs-center dont-break-out'><h1>{$pageName}</h1></span>";
+
+  //start nav
+  echo "<nav class='navbar navbar-light bg-faded'><ul class='nav navbar-nav' role='navigation'>";
+
+  //navigation links
+  makeNavItems();
+
+  //end of nav and sidebar
+  echo "</ul></nav><br></div>";
+
+  //start content container
+  echo "<div class='col-lg-10'>";
+}
+
+//adds a nav item
+function addNavItem($url, $name) {
+  echo "<li class='navbar-item'><a class='nav-link dont-break-out' href='{$url}'>{$name}</a></li>";
+}
+
+//prints out the current nav links
+function makeNavItems() {
+  //user info, also adds some nav items
+  setupUserData();
+
+  //user nav info item
+  if (userPresent()) {
+    global $userPermName;
+    global $userName;
+    echo "<p class='text-xs-center dont-break-out'>{$userPermName}: <a href='user.php'>{$userName}</a></p><hr>";
+  }
+
+  //add startpage nav item
+  addNavItem("index.php", "Startseite");
+
+  //add user info and actions navs
+  if (! userPresent()) {
+    addNavItem("setUser.php", "Benutzer wählen");
+  }
+
+  //print actions if auth present
+  global $userPerm;
+  if (permIsHigh($userPerm)) {
+    addNavItem("userActions.php", "Benutzeraktionen");
+  }
+
+  //auth link
+  if (userNeedsAuth($userId)) {
+    addNavItem(authURL(), "Anmelden");
+  }
+
+  //user logged in actions
+  if (userPresent()) {
+    addNavItem("messages.php", "Aufgaben");
+    addNavItem("setPswd.php", "Passwort ändern");
+  }
+
+  //general actions
+  addNavItem("addMessage.php", "Nachricht hinzufügen");
+  addNavItem("setUser.php", "Benutzer wählen");
+
+  //user logout
+  if (userPresent()) {
+    addNavItem("index.php?userId=1", "Abmelden");
+  }
 }
 
 //called at end of all pages to end the html and do cloaing actions
 function endPage() {
   global $dbConn;
-  echo "</body></html>";
+  echo "</div></div></body></html>";
   mysqli_close($dbConn);
 }
 
-//prints the user info string given back by setupUserData
-function setupUser() {
-  echo setupUserData();
-}
-
-//sets up the user in session and glbal variables
+//sets up the user in session and global variables
 function setupUserData() {
   global $userId;
   global $userName;
@@ -77,22 +145,6 @@ function setupUserData() {
   
   //copy permission name string to local variable
   $userPermName = permName($userPerm);
-  
-  //create user info and a few short actions
-  $str = "<div style='flow: right; text-align:right;'>";
-  if ($userId == 1) {
-    $str .= "<a href='setUser.php'>Benutzer wählen</a>";
-  } else {
-    $str .= "{$userPermName}: <a href='user.php'>{$userName}</a> |";
-    $str .= " <a href='userActions.php'>Aktionen</a>";
-  }
-  if (userNeedsAuth($userId)) {
-    $str .= " | <a href='" . authURL() . "'>anmelden</a>";
-  }
-  $str .= "</div>";
-  
-  //return that string, to be printed in setupUser or printed sometime else when necessary
-  return $str;
 }
 
 //connect to the database and print errors if there are any
@@ -112,7 +164,7 @@ function query($queryString, $logQuerySuccess = false) {
   $queryResult = mysqli_query($dbConn, $queryString);
   if ($queryResult) {
     if ($logQuerySuccess) {
-      echo "<br>Sucessfully executed {$queryString}";
+      echo "<br>Successfully executed {$queryString}";
     }
   } else {
     exit("<br>MySQL query error: " . mysqli_error($dbConn));
@@ -473,7 +525,7 @@ function roomName($ip) {
   if (array_key_exists($ip, $rooms)) {
     return "Raum {$rooms[$ip]}";
   } else {
-    return "<em>unbekannter Raum IP: </em>" . long2ip($ip);
+    return "<em>Raum mit IP: </em>" . long2ip($ip);
   }
 }
 
@@ -486,7 +538,7 @@ function roomNameSimple($ip) {
   if (array_key_exists($ip, $rooms)) {
     return "Raum {$rooms[$ip]}";
   } else {
-    return "unbekannter Raum IP: " . long2ip($ip);
+    return "Raum mit IP: " . long2ip($ip);
   }
 }
 

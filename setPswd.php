@@ -1,16 +1,16 @@
 <?php
 include "util.php";
 setupPage("Passwort ändern");
-setupUser();
+
 if (! permIsHigh($userPerm)) {
   loginPlease();
 } else {
-  $pswdSetSucess = false;
+  $pswdSetSuccess = false;
   if (! empty($_POST["pswdSet"]) && ! empty($_POST["pswdRep"])) {
     $newPswd = $_POST["pswdSet"];
     if ($newPswd === $_POST["pswdRep"]) {
       if (strlen($newPswd) >= 8) {
-        $pswdSetSucess = true;
+        $pswdSetSuccess = true;
         query("UPDATE admin SET password={$newPswd} WHERE id={$userId}");
         makeAlert("Passwort geändert", "success", "Erfolg!");
       } else {
@@ -20,7 +20,7 @@ if (! permIsHigh($userPerm)) {
       makeAlert("Passwörter stimmen nicht überein", "warning", "Warnung:");
     }
   }
-  if (! $pswdSetSucess) {
+  if (! $pswdSetSuccess) {
     if (empty($_GET["backto"])) {
       $_GET["backto"] = "messages.php";
     }

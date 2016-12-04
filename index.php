@@ -1,13 +1,7 @@
 <?php
 include "util.php";
 setupPage("Überblick");
-setupUser();
-if (userPresent()) {
-  echo "<h4><a href='messages.php'>Aufgaben</a></h4>";
-  echo "<h4><a href='setPswd.php'>Passwort ändern</a></h4>";
-}
-echo "<h4><a href='addMessage.php'>Nachricht hinzufügen</a></h4>";
-echo "<h4><a href='setUser.php'>Benutzer auswählen</a></h4>";
+
 $roomCounts = [];
 getTypes();
 getStatusNames();
@@ -51,7 +45,8 @@ foreach ($roomCounts as $ip => $typeCounts) {
     echo "<td>";
     $displayPart = array_sum($statusCounts);
     foreach ($statusCounts as $statusId => $count) {
-      echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . "' style='font-family:Monospace;";
+      echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . " countTag' style='";
+      echo "font-family: Monospace;";
       if ($count >= $thresh) {
         echo "border-color:black; border-style:solid; border-width:3px; margin:0.4px;";
       } else {
