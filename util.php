@@ -31,7 +31,7 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
 
   //page title and icon
   echo "<div class='row'><div class='col-md-2'>";
-  echo "<a href='index.php'><img class='m-x-auto d-block' src='favicon-96x96.png' alt='icon image'></a>";
+  echo "<a href='index.php'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
   echo "<span class='text-xs-center dont-break-out'>{$insertBefore}<h1>{$pageName}</h1></span>";
 
   //start nav
