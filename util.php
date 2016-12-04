@@ -96,7 +96,7 @@ function makeNavItems() {
 
   //general actions
   addNavItem("addMessage.php", "Nachricht hinzufügen");
-  addNavItem("setUser.php", "Benutzer wechseln");
+  addNavItem("setUser.php", "Benutzer wählen");
 
   //user logout
   if (userPresent()) {
