@@ -24,12 +24,5 @@ if (permIsHigh($userPerm)) {
   userList("deleteUser.php?deleteUser=");
   echo "<br>";
 }
-if (userNeedsAuth()) {
-  echo "<h4><a href='" . authURL() . "'>Anmelden</a></h4>";
-}
-echo "<h4><a href='setUser.php'>Benutzer wechseln</a></h4>";
-if (userPresent()) {
-  echo "<h4><a href='index.php?userId=1'>Abmelden</a></h4>";
-}
 endPage();
 ?>
