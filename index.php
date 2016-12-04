@@ -45,7 +45,8 @@ foreach ($roomCounts as $ip => $typeCounts) {
     echo "<td>";
     $displayPart = array_sum($statusCounts);
     foreach ($statusCounts as $statusId => $count) {
-      echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . "' style='font-family:Monospace;";
+      echo "<span class='tag text-right " . ($count > 0 ? statusTagName($statusId) : "tag-default") . " countTag' style='";
+      echo "font-family: Monospace;";
       if ($count >= $thresh) {
         echo "border-color:black; border-style:solid; border-width:3px; margin:0.4px;";
       } else {
