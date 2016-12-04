@@ -36,14 +36,11 @@ function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
 
   //page title and icon
   echo "<div class='row'><div class='col-md-2'>";
-  echo "<a href='index.php'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
+  echo "<a href='index.php' title='Startseite'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
   echo "<span class='text-xs-center dont-break-out'><h1>{$pageName}</h1></span>";
 
   //start nav
   echo "<nav class='navbar navbar-light bg-faded'><ul class='nav navbar-nav' role='navigation'>";
-
-  //user info, also adds some nav items
-  echo setupUserData();
 
   //navigation links
   makeNavItems();
@@ -62,12 +59,42 @@ function addNavItem($url, $name) {
 
 //prints out the current nav links
 function makeNavItems() {
+  //user info, also adds some nav items
+  setupUserData();
+
+  //user nav info item
+  if (userPresent()) {
+    global $userPermName;
+    global $userName;
+    echo "<p class='text-xs-center dont-break-out'>{$userPermName}: <a href='user.php'>{$userName}</a></p><hr>";
+  }
+
+  //add startpage nav item
+  addNavItem("index.php", "Startseite");
+
+  //add user info and actions navs
+  if (userPresent()) {
+    addNavItem("userActions.php", "Benutzeraktionen");
+  } else {
+    addNavItem("setUser.php", "Benutzer wählen");
+  }
+
+  //auth link
+  if (userNeedsAuth($userId)) {
+    addNavItem(authURL(), "Anmelden");
+  }
+
+  //user logged in actions
   if (userPresent()) {
     addNavItem("messages.php", "Aufgaben");
     addNavItem("setPswd.php", "Passwort ändern");
   }
+
+  //general actions
   addNavItem("addMessage.php", "Nachricht hinzufügen");
   addNavItem("setUser.php", "Benutzer wechseln");
+
+  //user logout
   if (userPresent()) {
     addNavItem("index.php?userId=1", "Abmelden");
   }
@@ -80,7 +107,7 @@ function endPage() {
   mysqli_close($dbConn);
 }
 
-//sets up the user in session and glbal variables
+//sets up the user in session and global variables
 function setupUserData() {
   global $userId;
   global $userName;
@@ -114,17 +141,6 @@ function setupUserData() {
   
   //copy permission name string to local variable
   $userPermName = permName($userPerm);
-  
-  //create user info and actions
-  if ($userId == 1) {
-    addNavItem("setUser.php", "Benutzer wählen");
-  } else {
-    echo "<p class='text-xs-center'>{$userPermName}: <a href='user.php'>{$userName}</a></p>";
-    addNavItem("userActions.php", "Benutzeraktionen");
-  }
-  if (userNeedsAuth($userId)) {
-    addNavItem(authURL(), "Anmelden");
-  }
 }
 
 //connect to the database and print errors if there are any
