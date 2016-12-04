@@ -52,7 +52,7 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
 
 //adds a nav item
 function addNavItem($url, $name) {
-  echo "<li class='navbar-item'><a class='nav-link' href='{$url}'>{$name}</a></li>";
+  echo "<li class='navbar-item'><a class='nav-link dont-break-out' href='{$url}'>{$name}</a></li>";
 }
 
 //prints out the current nav links
