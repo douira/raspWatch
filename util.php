@@ -73,10 +73,14 @@ function makeNavItems() {
   addNavItem("index.php", "Startseite");
 
   //add user info and actions navs
-  if (userPresent()) {
-    addNavItem("userActions.php", "Benutzeraktionen");
-  } else {
+  if (! userPresent()) {
     addNavItem("setUser.php", "Benutzer wählen");
+  }
+
+  //print actions if auth present
+  global $userPerm;
+  if (permIsHigh($userPerm)) {
+    addNavItem("userActions.php", "Benutzeraktionen");
   }
 
   //auth link
