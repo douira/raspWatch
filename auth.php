@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Authentifizierung");
-setupUser();
+
 if (permIsHigh($userPerm)) {
   makeAlert("Schon authentifiziert", "info", "Info:");
 } else if (! permIsHigh(adminGetPerm($userId))) {

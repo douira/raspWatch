@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Benutzeraktionen");
-setupUser();
+
 if (permIsHigh($userPerm)) {
   if (! empty($_POST["email"])) {
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);

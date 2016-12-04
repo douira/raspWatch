@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Benutzer löschen");
-setupUser();
+
 if (permIsHigh($userPerm)) {
   if (! empty($_GET["deleteUser"])) {
     getAdmins();

@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Nachricht");
-setupUser();
+
 if (empty($_GET["id"])) {
   makeAlert("Keine Nachrichen ID gesendet", "danger", "Fehler!");
 } else {

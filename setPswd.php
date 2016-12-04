@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Passwort ändern");
-setupUser();
+
 if (! permIsHigh($userPerm)) {
   loginPlease();
 } else {

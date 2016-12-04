@@ -31,11 +31,30 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
 
   //page title and icon
   echo "<div class='row'><div class='col-md-2'>";
-  echo "<img class='m-x-auto d-block' src='favicon-96x96.png' alt='icon image'>";
+  echo "<a href='index.php'><img class='m-x-auto d-block' src='favicon-96x96.png' alt='icon image'></a>";
   echo "<span class='text-xs-center'>{$insertBefore}<h1>{$pageName}</h1></span>";
+
+  //user info
+  echo setupUserData();
+
+  //navigation links
+  makeNav();
+
+  //end of sidebar
   echo "</div>";
 
-  echo "<div class='col-md-10'><a href='index.php'>Startseite</a>";
+  //start content container
+  echo "<div class='col-md-10'>"; //<a href='index.php'>Startseite</a>";
+}
+
+//prints out the current nav links
+function makeNav() {
+  if (userPresent()) {
+  echo "<h4><a href='messages.php'>Aufgaben</a></h4>";
+  echo "<h4><a href='setPswd.php'>Passwort ändern</a></h4>";
+  }
+  echo "<h4><a href='addMessage.php'>Nachricht hinzufügen</a></h4>";
+  echo "<h4><a href='setUser.php'>Benutzer auswählen</a></h4>";
 }
 
 //called at end of all pages to end the html and do cloaing actions
@@ -43,11 +62,6 @@ function endPage() {
   global $dbConn;
   echo "</div></div></body></html>";
   mysqli_close($dbConn);
-}
-
-//prints the user info string given back by setupUserData
-function setupUser() {
-  echo setupUserData();
 }
 
 //sets up the user in session and glbal variables

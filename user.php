@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Benutzer");
-setupUser();
+
 $useUserId = $userId;
 $useUserName = $userName;
 if (! empty($_GET["id"])) {

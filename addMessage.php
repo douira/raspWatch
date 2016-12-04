@@ -1,7 +1,7 @@
 <?php
 include "util.php";
 setupPage("Nachricht hinzufügen");
-setupUser();
+
 if (! empty($_POST["message"])) {
   $ip = roomIpFromName($_POST["room"]);
   if (! $ip) {

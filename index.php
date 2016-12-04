@@ -1,13 +1,7 @@
 <?php
 include "util.php";
 setupPage("Überblick");
-setupUser();
-if (userPresent()) {
-  echo "<h4><a href='messages.php'>Aufgaben</a></h4>";
-  echo "<h4><a href='setPswd.php'>Passwort ändern</a></h4>";
-}
-echo "<h4><a href='addMessage.php'>Nachricht hinzufügen</a></h4>";
-echo "<h4><a href='setUser.php'>Benutzer auswählen</a></h4>";
+
 $roomCounts = [];
 getTypes();
 getStatusNames();

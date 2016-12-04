@@ -3,7 +3,7 @@ include "util.php";
 if (! empty($_GET["ip"])) {
   $ip = $_GET["ip"];
   setupPage("Gerät in " . roomNameSimple($ip));
-  setupUser();
+
   getRooms();
   if (array_key_exists($_GET["ip"], $rooms)) {
     $memQuery = queryToRows("SELECT memory FROM status WHERE ip={$ip} ORDER BY time DESC LIMIT 1");

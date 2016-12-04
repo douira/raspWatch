@@ -1,7 +1,6 @@
 <?php
 include "util.php";
 setupPage("Aufgaben");
-setupUser();
 
 //message remove get request
 if (! empty($_GET["action"]) && ! empty($_GET["id"])) {
