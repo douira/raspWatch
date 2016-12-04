@@ -22,7 +22,8 @@ if (permIsHigh($userPerm)) {
     </div></form>";
   echo "<h4 class='text-danger'>Benutzer löschen</h4>";
   userList("deleteUser.php?deleteUser=");
-  echo "<br>";
+} else {
+  makeAlert("<a href='" . authURL() . "'>Authentifizierung</a> erforderlich", "info", "Info:");
 }
 endPage();
 ?>
