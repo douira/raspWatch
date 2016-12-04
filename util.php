@@ -13,7 +13,7 @@ $pageLength = 25;
 $pageNum = 0;
 
 //called at the start of all pages, sets up the html of pages
-function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
+function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   if (! $pageTitle) {
     $pageTitle = $pageName;
   }
@@ -26,13 +26,18 @@ function setupPage($pageName, $pageTitle = false, $insertBefore = "") {
   //other, static head parts
   include("header content.html");
 
+  //use given additional headers
+  if ($additionalHeaders) {
+    echo $additionalHeaders;
+  }
+
   //end of head and start of body
   echo "</head><body>";
 
   //page title and icon
   echo "<div class='row'><div class='col-md-2'>";
   echo "<a href='index.php'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
-  echo "<span class='text-xs-center dont-break-out'>{$insertBefore}<h1>{$pageName}</h1></span>";
+  echo "<span class='text-xs-center dont-break-out'><h1>{$pageName}</h1></span>";
 
   //start nav
   echo "<nav class='navbar navbar-light bg-faded'><ul class='nav navbar-nav' role='navigation'>";
