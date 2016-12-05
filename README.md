@@ -13,3 +13,5 @@ The repo is the htdocs folder of an Apache PHP server using MySQL (MariaDB).
 
 The current layout of the database is stored in a SQL dump so that changes in the database are reflected in this as well as normal changes to the php code.
 
+Here's a screenshot of messageSingle.php
+![screenshot](https://raw.githubusercontent.com/douira/raspWatch/master/screenshot.png "Screenshot")
