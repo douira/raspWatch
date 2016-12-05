@@ -15,4 +15,5 @@ if (permIsHigh($userPerm)) {
 } else {
   echo "ERROR: Not authenticated!".
 }
+endPage();
 ?>
