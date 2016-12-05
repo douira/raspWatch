@@ -788,7 +788,7 @@ function userList($linkPrefix, $showAdmins = true, $showNormal = true) {
 
 //creates a user list assigns to users
 function assignList($linkPrefix, $showAdmins = true) {
-  echo "<div class='col-md-4'><h3>Benutzer zuweisen</h3>";
+  echo "<div class='col-sm-5'><h3>Benutzer zuweisen</h3>";
   userList($linkPrefix . "action=assign&assignee=", $showAdmins);
   echo "</div>";
 }
