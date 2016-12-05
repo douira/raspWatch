@@ -35,7 +35,7 @@ function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   echo "</head><body>";
 
   //page title and icon
-  echo "<div class='row'><div class='col-lg-2'>";
+  echo "<div class='row'><div class='col-xl-2 navList'>";
   echo "<a href='index.php' title='Startseite'><img class='m-x-auto d-block' src='apple-icon-120x120.png' alt='icon image'></a>";
   echo "<span class='text-xs-center dont-break-out'><h1>{$pageName}</h1></span>";
 
@@ -49,7 +49,7 @@ function setupPage($pageName, $additionalHeaders = false, $pageTitle = false) {
   echo "</ul></nav><br></div>";
 
   //start content container
-  echo "<div class='col-lg-10'>";
+  echo "<div class='offset-xl-2 col-xl-10 content'>";
 }
 
 //adds a nav item
@@ -788,7 +788,7 @@ function userList($linkPrefix, $showAdmins = true, $showNormal = true) {
 
 //creates a user list assigns to users
 function assignList($linkPrefix, $showAdmins = true) {
-  echo "<div class='col-sm-5'><h3>Benutzer zuweisen</h3>";
+  echo "<div class='col-sm-7'><h3>Benutzer zuweisen</h3>";
   userList($linkPrefix . "action=assign&assignee=", $showAdmins);
   echo "</div>";
 }

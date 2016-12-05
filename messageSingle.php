@@ -60,12 +60,12 @@ if (empty($_GET["id"])) {
   } else {
     echo "<p><em>kein Kommentar</em></p>";
   }
-  echo "</div><br>";
   echo "</div>";
+  echo "</div><br>";
 
   $linkPrefix = "messageSingle.php?id={$id}&";
   if (userPresent()) {
-    echo "<div class='row'><div class='col-sm-5'><h3>Aktionen</h3>";
+    echo "<div class='row'><div class='col-sm-5' style='margin-bottom:1em;'><h3>Aktionen</h3>";
     if (permIsHigh($userPerm) || ! adminGetPerm($userId)) {
       echo "<div class='list-group'>";
       $statusId = $message["statusId"];
@@ -87,7 +87,7 @@ if (empty($_GET["id"])) {
       loginPlease();
     }
   }
-  echo "</div><br>";
+  echo "</div>";
   if (permIsHigh($userPerm)) {
     assignList($linkPrefix);
   }
